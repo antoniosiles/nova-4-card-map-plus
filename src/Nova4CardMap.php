@@ -1,6 +1,6 @@
 <?php
 
-namespace Imumz\Nova4CardMap;
+namespace AntonioSiles\Nova4CardMap;
 
 use Laravel\Nova\Card;
 
@@ -20,7 +20,7 @@ class Nova4CardMap extends Card
      */
     public function component()
     {
-        return 'nova-4-card-map';
+        return 'nova-4-card-map-plus';
     }
 
     public function height($height){

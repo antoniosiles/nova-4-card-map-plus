@@ -7,4 +7,4 @@ mix
   .js('resources/js/card.js', 'js')
   .vue({ version: 3 })
   .css('resources/css/card.css', 'css')
-  .nova('imumz/nova-4-card-map')
+  .nova('antoniosiles/nova-4-card-map-plus')

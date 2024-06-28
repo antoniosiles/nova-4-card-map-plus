@@ -12,13 +12,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Imumz\\Nova4CardMap\\": "src/"
+            "AntonioSiles\\Nova4CardMap\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Imumz\\Nova4CardMap\\CardServiceProvider"
+                "AntonioSiles\\Nova4CardMap\\CardServiceProvider"
             ]
         }
     },
