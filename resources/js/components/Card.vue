@@ -85,26 +85,34 @@ export default {
         if (this.card.type == "GeoJson") {
             IsJsonString(this.card.geoJson);
         } else if (this.card.type == "LatLon") {
-            var geojsonCustom = {
-                type: "FeatureCollection",
-                features: [
-                    {
-                        type: "Feature",
-                        geometry: {
-                            type: "Point",
-                            coordinates: [
-                                this.card.longitude,
-                                this.card.latitude,
-                            ],
-                        },
-                        properties: {
-                            popupContent: this.card.popup,
-                        },
-                    },
-                ],
-            };
-
-            geoJsons.push(geojsonCustom);
+            if(Array.isArray(this.card.points)){
+                console.log(this.card.points);
+                for (var i = 0; i < this.card.points.length; i++) {
+                    var point = this.card.points[i];
+                    var geojsonCustom = {
+                        type: "FeatureCollection",
+                        features: [
+                            {
+                                type: "Feature",
+                                geometry: {
+                                    type: "Point",
+                                    coordinates: [
+                                        point[1],
+                                        point[0],
+                                    ],
+                                },
+                                properties: {
+                                    popupContent: this.card.popup,
+                                },
+                            },
+                        ],
+                    };
+                    geoJsons.push(geojsonCustom);
+                };
+                
+            }else{
+                console.log("points no registered");
+            }
         }
 
         return {

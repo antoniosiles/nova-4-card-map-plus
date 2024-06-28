@@ -1,5 +1,5 @@
-![](https://img.shields.io/github/stars/iMuMz/Nova4CardMap?&style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/imumz/Nova4CardMap?color=red&style=flat-square)
+![](https://img.shields.io/github/stars/antoniosiles/nova-4-card-map?&style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/antoniosiles/nova-4-card-map?color=red&style=flat-square)
 ![Packagist](https://img.shields.io/packagist/dt/imumz/nova-4-card-map?color=green&logo=testing&style=flat-square)
 # Nova4CardMap
 Custom [Laravel Nova 4](https://nova.laravel.com/) map card using [Leaflet](https://leafletjs.com/). Supports Google Maps, marker clustering, map height, latitude and longitude coordinates, GeoJSON, marker popup and custom marker icons.
@@ -9,7 +9,7 @@ Custom [Laravel Nova 4](https://nova.laravel.com/) map card using [Leaflet](http
 ### Installation
 
 ```
-composer require imumz/nova-4-card-map
+composer require antoniosiles/nova-4-card-map
 ```
 ### Usage
 

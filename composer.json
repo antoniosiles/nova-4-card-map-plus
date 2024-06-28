@@ -1,6 +1,6 @@
 {
-    "name": "imumz/nova-4-card-map",
-    "description": "A Laravel Nova card.",
+    "name": "antoniosiles/nova-4-card-map",
+    "description": "A Laravel Nova card plus.",
     "keywords": [
         "laravel",
         "nova"

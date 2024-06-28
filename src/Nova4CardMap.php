@@ -65,6 +65,12 @@ class Nova4CardMap extends Card
         ]);
     }
 
+    public function points($points) {
+        return $this->withMeta([
+            'points' => $points
+        ]);
+    }
+
     public function googleApiKey($googleApiKey) {
 
         return $this->withMeta([
