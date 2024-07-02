@@ -64,13 +64,6 @@ class Nova4CardMap extends Card
             'longitude' => $longitude
         ]);
     }
-
-    public function points($points) {
-        return $this->withMeta([
-            'points' => $points
-        ]);
-    }
-
     public function googleApiKey($googleApiKey) {
 
         return $this->withMeta([
@@ -82,6 +75,16 @@ class Nova4CardMap extends Card
 
         return $this->withMeta([
             'googleMapType' => $googleMapType
+        ]);
+    }
+    public function bearerToken($bearerToken){
+        return $this->withMeta([
+            'bearerToken' => $bearerToken
+        ]);
+    }
+    public function devices($devices){
+        return $this->withMeta([
+            'devices' => $devices
         ]);
     }
 }
