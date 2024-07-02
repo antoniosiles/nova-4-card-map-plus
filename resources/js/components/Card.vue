@@ -32,7 +32,6 @@ export default {
             //alert("clusterclick")
         },
         clearMap(){
-            console.log("clearMap");
             this.layerGroup.clearLayers();
             this.geoJsons.length = 0;
         },
@@ -55,8 +54,6 @@ export default {
                 .post("/api/card-map-plus-filter", filters)
                 .then(res => {
                     document.getElementById("map-message").innerHTML = "Cargando locaciones...";
-                    console.log("res.data");
-                    console.log(res.data);
                     if (this.card.type == "GeoJson") {
                         this.card.geoJson = res.data;
                         this.geoJsons.push(res.data.points);
@@ -67,9 +64,6 @@ export default {
                     var markers = L.markerClusterGroup({
                         disableClusteringAtZoom: 11,
                     });
-                    console.log("filterData::this.geoJsons");
-                    console.log(this.geoJsons.length);
-                    console.log(this.geoJsons);
                     var geo = L.geoJson(this.geoJsons, {
                         onEachFeature: function (feature, layer) {
                             if (featureType == "LatLon") {
@@ -84,6 +78,11 @@ export default {
                     });
                     markers.addLayer(geo);
                     this.layerGroup.addLayer(markers);
+                    if( res.data.polylines.lines != undefined && res.data.polylines.lines.length > 0  ){
+                        var polylines = L.polyline(res.data.polylines.lines, res.data.polylines.style);
+                        this.layerGroup.addLayer(polylines);
+                        this.mapGlobal.flyTo([res.data.polylines.moveTo.latitude,res.data.polylines.moveTo.longitude], res.data.polylines.moveTo.zoom);
+                    }
                     //this.layerGroup.fitBounds(geo.getBounds());
                     document.getElementById("map-message").innerHTML = "Locaciones cargadas";
                 })
@@ -200,7 +199,7 @@ export default {
         });
         this.mapGlobal = map;
 
-        map.setView([-2.1910846, -79.8844593], 18);
+        map.setView([-2.1910846, -79.8844593], 14);
         this.layerGroup = L.layerGroup().addTo(map);
 
         var osm = L.tileLayer(
@@ -236,9 +235,6 @@ export default {
         var markers = L.markerClusterGroup({
             disableClusteringAtZoom: 11,
         });
-        console.log("mounted::this.geoJsons");
-        console.log(this.geoJsons.length);
-        console.log(this.geoJsons);
         if( this.geoJsons.length > 1 ){
             var geo = L.geoJson(this.geoJsons, {
                 onEachFeature: function (feature, layer) {
@@ -268,6 +264,7 @@ export default {
     },
     created() {
         Nova.$on("global-filter-changed", filter => {
+            console.log(filter);
             if( filter.component == "select-filter" && filter.class == "App\\Nova\\Filters\\Device"){
                 this.filterDevice = filter.currentValue;
                 console.log("Cambiar por device: " + this.filterDevice + ", Cambiar por fecha: " + this.filterDate);
@@ -280,10 +277,12 @@ export default {
             }
         });
 
-        Nova.$emit("global-filter-request", [
-            "App\\Nova\\Filters\\Date",
-            "App\\Nova\\Filters\\Device"
-        ]);
+        // Nova.$emit("global-filter-request", [
+        //     "App\\Nova\\Filters\\Date",
+        //     "App\\Nova\\Filters\\Device"
+        // ]);
+
+        Nova.$emit("global-filter-request");
     }
 };
 </script>
