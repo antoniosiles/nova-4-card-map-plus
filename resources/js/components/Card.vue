@@ -88,7 +88,7 @@ export default {
             this.geoJsons.length = 0;
         },
         filterData() {
-            if( this.filters.device == null || this.filters.device == undefined ){
+            if( this.filters.device == null || this.filters.device == undefined || this.filters.device <= 0 ){
                 document.getElementById("map-message").innerHTML = "Seleccione una Dispositivo para cargar las locaciones";
                 return;
             }
@@ -165,9 +165,9 @@ export default {
     },
     data() {
         let mapGlobal = null;
+        let timer = null;
         var layerGroup = null;
         let geoJsons = [];
-        console.log(this.card.devices);
         var filters = {
             device: 0,
             //devices: JSON.parse( this.card.devices ),
@@ -260,7 +260,8 @@ export default {
         return {
             options: {},
             geoJsons,
-            filters
+            filters,
+            timer
         };
     },
     mounted() {
@@ -358,8 +359,19 @@ export default {
         if (this.card.googleApiKey == null) {
             this.googleProviders = [];
         }
+
+        this.timer = setInterval(() => {
+            if( this.filters.watchMode == 1 ){
+                this.filterData();
+            }
+        }, 10000)
     },
     created() {
+    },
+    beforeDestroy() {
+        console.log("Destroying timer");
+        clearInterval(this.timer);
+        console.log("Timer Destroyed");
     }
 };
 </script>

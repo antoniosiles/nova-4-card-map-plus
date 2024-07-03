@@ -23,6 +23,7 @@ class CardServiceProvider extends ServiceProvider
         Nova::serving(function (ServingNova $event) {
             Nova::script('nova-4-card-map-plus', __DIR__.'/../dist/js/card.js');
             Nova::style('nova-4-card-map-plus', __DIR__.'/../dist/css/card.css');
+            Nova::style('nova-4-card-map-plus-pretty-checkbox', __DIR__.'/../dist/css/pretty-checkbox.css');
         });
     }
 
