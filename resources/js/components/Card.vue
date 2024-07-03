@@ -18,19 +18,19 @@
                 <div class="w-auto">
                     <div class="px-4 py-2">
                         <label for="date-filter" class="block mb-3 mr-3 text-80 pt-2 leading-tight whitespace-nowrap">Fecha</label>
-                        <input type="date" class="w-full form-control form-input form-input-bordered" id="date-filter" name="date-filter" v-model="filters.date" @change="filterData()">
+                        <input type="date" class="w-full form-control form-input form-input-bordered" id="date-filter" name="date-filter" v-model="filters.date" @change="filterData()" :disabled="filters.watchMode == 1">
                     </div>
                 </div>
                 <div class="w-auto">
                     <div class="px-4 py-2">
                         <label for="time-start-filter" class="block mb-3 mr-3 text-80 pt-2 leading-tight whitespace-nowrap">Hora inicio</label>
-                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-start-filter" name="time-start-filter" v-model="filters.timeStart" @change="filterData()">
+                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-start-filter" name="time-start-filter" v-model="filters.timeStart" @change="filterData()" :disabled="filters.watchMode == 1">
                     </div>
                 </div>
                 <div class="w-auto">
                     <div class="px-4 py-2">
                         <label for="time-end-filter" class="block mb-3 mr-3 text-80 pt-2 leading-tight whitespace-nowrap">Hora fin</label>
-                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-end-filter" name="time-end-filter" v-model="filters.timeEnd" @change="filterData()">
+                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-end-filter" name="time-end-filter" v-model="filters.timeEnd" @change="filterData()" :disabled="filters.watchMode == 1">
                     </div>
                 </div>
                 <div class="w-auto">
