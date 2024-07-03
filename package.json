@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "leaflet.fullscreen": "^3.0.2",
     "leaflet.gridlayer.googlemutant": "^0.14.1",
     "leaflet.markercluster": "^1.5.3",
     "scriptjs": "^2.5.9"

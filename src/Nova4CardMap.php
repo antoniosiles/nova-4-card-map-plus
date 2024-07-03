@@ -87,4 +87,14 @@ class Nova4CardMap extends Card
             'devices' => $devices
         ]);
     }
+    public function endpoint($endpoint){
+        return $this->withMeta([
+            'endpoint' => $endpoint
+        ]);
+    }
+    public function fullScreen($fullScreen){
+        return $this->withMeta([
+            'fullScreen' => $fullScreen
+        ]);
+    }
 }
