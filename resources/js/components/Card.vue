@@ -50,7 +50,7 @@
         </div>
         
         <div class="px-4 pb-2" id="map-message" ></div>
-        <div id="map" :style="'height:' + this.mapHeight"></div>
+        <div id="card-map-plus" :style="'height:' + this.mapHeight"></div>
     </card>
 </template>
 
@@ -273,7 +273,7 @@ export default {
           );
         }
         if( this.card.fullScreen.show != undefined && this.card.fullScreen.show ){
-            var map = L.map("map", {
+            var map = L.map("card-map-plus", {
                 zoomControl: true,
                 fadeAnimation: true,
                 markerZoomAnimation: true,
@@ -289,7 +289,7 @@ export default {
                 },
             });
         }else{
-            let map = L.map("map", {
+            let map = L.map("card-map-plus", {
                 zoomControl: true,
                 fadeAnimation: true,
                 markerZoomAnimation: true
@@ -386,7 +386,7 @@ export default {
 .leaflet-top.leaflet-left .leaflet-control-zoom {
     box-shadow: 0 0 7px #999 !important;
 }
-#map {
+#card-map-plus {
     z-index: 0;
 }
 </style>
