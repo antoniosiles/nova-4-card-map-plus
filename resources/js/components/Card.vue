@@ -152,9 +152,9 @@ export default {
 
                         let featureType = this.card.type;
                         let popup = this.card.popup;
-                        var markers = L.markerClusterGroup({
-                            disableClusteringAtZoom: 9,
-                        });
+                        // var markers = L.markerClusterGroup({
+                        //     disableClusteringAtZoom: 11,
+                        // });
                         var geo = L.geoJson(this.geoJsons, {
                             onEachFeature: function (feature, layer) {
                                 if (featureType == "LatLon") {
@@ -167,8 +167,8 @@ export default {
                                 return L.marker(latlng);
                             },
                         });
-                        //geo.addTo(this.layerGroup);
-                        markers.addLayer(geo).addTo(this.layerGroup);
+                        geo.addTo(this.layerGroup);
+                        //markers.addLayer(geo).addTo(this.layerGroup);
                         //this.layerGroup.addLayer(markers);
                     }
                     
@@ -366,9 +366,9 @@ export default {
 
         layerControl.addTo(map);
 
-        var markers = L.markerClusterGroup({
-            disableClusteringAtZoom: 11,
-        });
+        // var markers = L.markerClusterGroup({
+        //     disableClusteringAtZoom: 11,
+        // });
         if( this.geoJsons.length > 1 ){
             var geo = L.geoJson(this.geoJsons, {
                 onEachFeature: function (feature, layer) {
@@ -382,8 +382,9 @@ export default {
                     return L.marker(latlng);
                 },
             });
-            markers.addLayer(geo);
-            layerGroup.addLayer(markers);
+            geo.addTo(this.layerGroup);
+            // markers.addLayer(geo);
+            // layerGroup.addLayer(markers);
             //layerGroup.fitBounds(geo.getBounds());
         }
         
