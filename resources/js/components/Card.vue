@@ -95,11 +95,8 @@ export default {
         },
         clearMap(){
             if(this.layerGroup != undefined && this.layerGroup != null ){
-                console.log(this.layerGroup.getLayers());
                 if(this.layerGroup.getLayers().length > 0){
-                    console.log("clearLayers: eliminando...");
                     this.layerGroup.clearLayers();
-                    console.log("clearLayers: eliminado");
                 }
                 this.geoJsons.length = 0;
             }else{
@@ -147,7 +144,6 @@ export default {
                     this.filters.messages.success = "";
                     var pointsLength = res.data.points.features != undefined && res.data.points.features.length > 0 ? res.data.points.features.length : 0 ;
                     var linesLength = res.data.polylines.lines != undefined && res.data.polylines.lines.length > 0 ? res.data.polylines.lines.length : 0 ;
-                    console.log("pointsLength: " + pointsLength + " ,linesLength: " + linesLength);
                     if( pointsLength > 0 ){
                         if (this.card.type == "GeoJson") {
                             this.card.geoJson = res.data;
@@ -157,7 +153,7 @@ export default {
                         let featureType = this.card.type;
                         let popup = this.card.popup;
                         var markers = L.markerClusterGroup({
-                            disableClusteringAtZoom: 11,
+                            disableClusteringAtZoom: 9,
                         });
                         var geo = L.geoJson(this.geoJsons, {
                             onEachFeature: function (feature, layer) {
@@ -171,14 +167,13 @@ export default {
                                 return L.marker(latlng);
                             },
                         });
-                        geo.addTo(this.layerGroup);
-                        //markers.addLayer(geo);
+                        //geo.addTo(this.layerGroup);
+                        markers.addLayer(geo).addTo(this.layerGroup);
                         //this.layerGroup.addLayer(markers);
                     }
                     
                     if( linesLength ){
                         var polylines = L.polyline(res.data.polylines.lines, res.data.polylines.style).addTo(this.layerGroup);
-                        //this.layerGroup.addLayer(polylines);
                         this.mapGlobal.flyTo([res.data.polylines.moveTo.latitude,res.data.polylines.moveTo.longitude], res.data.polylines.moveTo.zoom);
                     }
                     //this.layerGroup.fitBounds(geo.getBounds());
@@ -375,7 +370,6 @@ export default {
             disableClusteringAtZoom: 11,
         });
         if( this.geoJsons.length > 1 ){
-            console.log("agregando geJsons to map");
             var geo = L.geoJson(this.geoJsons, {
                 onEachFeature: function (feature, layer) {
                     if (featureType == "LatLon") {
