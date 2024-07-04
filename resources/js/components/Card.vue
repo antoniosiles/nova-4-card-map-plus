@@ -94,7 +94,7 @@ export default {
             //alert("clusterclick")
         },
         clearMap(){
-            if(this.layerGroup != undefined ){
+            if(this.layerGroup != undefined && this.layerGroup != null ){
                 console.log(this.layerGroup.getLayers());
                 if(this.layerGroup.getLayers().length > 0){
                     console.log("clearLayers: eliminando...");
@@ -176,8 +176,8 @@ export default {
                     }
                     
                     if( linesLength ){
-                        var polylines = L.polyline(res.data.polylines.lines, res.data.polylines.style);
-                        this.layerGroup.addLayer(polylines);
+                        var polylines = L.polyline(res.data.polylines.lines, res.data.polylines.style).addTo(this.layerGroup);
+                        //this.layerGroup.addLayer(polylines);
                         this.mapGlobal.flyTo([res.data.polylines.moveTo.latitude,res.data.polylines.moveTo.longitude], res.data.polylines.moveTo.zoom);
                     }
                     //this.layerGroup.fitBounds(geo.getBounds());
