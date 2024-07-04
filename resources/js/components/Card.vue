@@ -83,7 +83,7 @@ export default {
             //alert("clusterclick")
         },
         clearMap(){
-            if( this.geoJsons  != undefined && this.geoJsons.length > 0 ){
+            if(this.layerGroup != undefined ){
                 this.layerGroup.clearLayers();
                 this.geoJsons.length = 0;
             }else{
