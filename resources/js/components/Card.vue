@@ -171,8 +171,9 @@ export default {
                                 return L.marker(latlng);
                             },
                         });
-                        markers.addLayer(geo);
-                        this.layerGroup.addLayer(markers);
+                        geo.addTo(this.layerGroup);
+                        //markers.addLayer(geo);
+                        //this.layerGroup.addLayer(markers);
                     }
                     
                     if( linesLength ){
@@ -374,6 +375,7 @@ export default {
             disableClusteringAtZoom: 11,
         });
         if( this.geoJsons.length > 1 ){
+            console.log("agregando geJsons to map");
             var geo = L.geoJson(this.geoJsons, {
                 onEachFeature: function (feature, layer) {
                     if (featureType == "LatLon") {
