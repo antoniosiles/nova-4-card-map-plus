@@ -83,8 +83,12 @@ export default {
             //alert("clusterclick")
         },
         clearMap(){
-            this.layerGroup.clearLayers();
-            this.geoJsons.length = 0;
+            if( this.geoJsons  != undefined && this.geoJsons.length > 0 ){
+                this.layerGroup.clearLayers();
+                this.geoJsons.length = 0;
+            }else{
+                console.log("No hay locaciones que borrar.");
+            }
         },
         filterData() {
             if( this.filters.device == null || this.filters.device == undefined || this.filters.device <= 0 ){
@@ -363,17 +367,18 @@ export default {
         }
 
         this.timer = setInterval(() => {
-            if( this.filters.watchMode == 1 ){
+            if( this.filters.watchMode != undefined && this.filters.watchMode == 1 ){
                 this.filterData();
             }
-        }, 10000)
+        }, 15000)
     },
     created() {
     },
-    beforeDestroy() {
-        console.log("Destroying timer");
+    beforeUnmount () {
         clearInterval(this.timer);
-        console.log("Timer Destroyed");
+    },
+    beforeDestroy() {
+        clearInterval(this.timer);
     }
 };
 </script>
