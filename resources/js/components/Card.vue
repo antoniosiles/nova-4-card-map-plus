@@ -49,7 +49,18 @@
             </div>
         </div>
         
-        <div class="px-4 pb-2" id="map-message" ></div>
+        <div class="h-auto md:col-span-12 h-full" >
+            <div class="scroll-wrap overflow-x-hidden overflow-y-auto flex-wrap bg-white flex w-auto" style="max-height: 288px;">
+                <div class="w-auto">
+                    <div class="alert alert-warning" role="alert" v-if="( this.filters.messages.warning == '' ? false : true ) ">
+                        {{ this.filters.messages.warning }}
+                    </div>
+                    <div class="alert alert-success" role="alert" v-if="( this.filters.messages.success == '' ? false : true ) ">
+                        {{ this.filters.messages.success }}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="card-map-plus" :style="'height:' + this.mapHeight"></div>
     </card>
 </template>
@@ -84,11 +95,11 @@ export default {
         },
         clearMap(){
             if(this.layerGroup != undefined ){
-                console.log(this.layerGroup);
                 console.log(this.layerGroup.getLayers());
                 if(this.layerGroup.getLayers().length > 0){
                     console.log("clearLayers: eliminando...");
                     this.layerGroup.clearLayers();
+                    console.log("clearLayers: eliminado");
                 }
                 this.geoJsons.length = 0;
             }else{
@@ -97,22 +108,27 @@ export default {
         },
         filterData() {
             if( this.filters.device == null || this.filters.device == undefined || this.filters.device <= 0 ){
-                document.getElementById("map-message").innerHTML = "Seleccione una Dispositivo para cargar las locaciones";
+                this.filters.messages.warning = "Seleccione un Dispositivo para cargar las locaciones";
+                this.filters.messages.success = "";
                 return;
             }
-            if( this.filters.date == null || this.filters.date == undefined ){
-                document.getElementById("map-message").innerHTML = "Seleccione una Fecha para cargar las locaciones";
+            if( this.filters.date == null || this.filters.date == undefined || this.filters.date == "" ){
+                this.filters.messages.warning = "Seleccione una Fecha para cargar las locaciones";
+                this.filters.messages.success = "";
                 return;
             }
             if( this.filters.timeStart == null || this.filters.timeStart == undefined ){
-                document.getElementById("map-message").innerHTML = "Seleccione una Hora de inicio para cargar las locaciones";
+                this.filters.messages.warning = "Seleccione una Hora de inicio para cargar las locaciones";
+                this.filters.messages.success = "";
                 return;
             }
             if( this.filters.timeEnd == null || this.filters.timeEnd == undefined ){
-                document.getElementById("map-message").innerHTML = "Seleccione una Hora de fin para cargar las locaciones";
+                this.filters.messages.warning = "Seleccione una Hora de fin para cargar las locaciones";
+                this.filters.messages.success = "";
                 return;
             }
-            document.getElementById("map-message").innerHTML = "Espere por favor mientras se obtiene las locaciones";
+            this.filters.messages.warning = "Espere por favor mientras se obtiene las locaciones";
+            this.filters.messages.success = "";
             this.clearMap();
             const params = {
                 date: this.filters.date,
@@ -127,47 +143,56 @@ export default {
             axios
                 .post(this.card.endpoint, params, config)
                 .then(res => {
-                    document.getElementById("map-message").innerHTML = "Cargando locaciones...";
-                    if (this.card.type == "GeoJson") {
-                        this.card.geoJson = res.data;
-                        this.geoJsons.push(res.data.points);
-                    }
+                    this.filters.messages.warning = "Cargando locaciones...";
+                    this.filters.messages.success = "";
+                    var pointsLength = res.data.points.features != undefined && res.data.points.features.length > 0 ? res.data.points.features.length : 0 ;
+                    var linesLength = res.data.polylines.lines != undefined && res.data.polylines.lines.length > 0 ? res.data.polylines.lines.length : 0 ;
+                    console.log("pointsLength: " + pointsLength + " ,linesLength: " + linesLength);
+                    if( pointsLength > 0 ){
+                        if (this.card.type == "GeoJson") {
+                            this.card.geoJson = res.data;
+                            this.geoJsons.push(res.data.points);
+                        }
 
-                    let featureType = this.card.type;
-                    let popup = this.card.popup;
-                    var markers = L.markerClusterGroup({
-                        disableClusteringAtZoom: 11,
-                    });
-                    var geo = L.geoJson(this.geoJsons, {
-                        onEachFeature: function (feature, layer) {
-                            if (featureType == "LatLon") {
-                                layer.bindPopup(feature.properties.popupContent);
-                            } else if (featureType == "GeoJson") {
-                                layer.bindPopup(feature.properties[popup]);
-                            }
-                        },
-                        pointToLayer: function (feature, latlng) {
-                            return L.marker(latlng);
-                        },
-                    });
-                    markers.addLayer(geo);
-                    this.layerGroup.addLayer(markers);
-                    if( res.data.polylines.lines != undefined && res.data.polylines.lines.length > 0  ){
+                        let featureType = this.card.type;
+                        let popup = this.card.popup;
+                        var markers = L.markerClusterGroup({
+                            disableClusteringAtZoom: 11,
+                        });
+                        var geo = L.geoJson(this.geoJsons, {
+                            onEachFeature: function (feature, layer) {
+                                if (featureType == "LatLon") {
+                                    layer.bindPopup(feature.properties.popupContent);
+                                } else if (featureType == "GeoJson") {
+                                    layer.bindPopup(feature.properties[popup]);
+                                }
+                            },
+                            pointToLayer: function (feature, latlng) {
+                                return L.marker(latlng);
+                            },
+                        });
+                        markers.addLayer(geo);
+                        this.layerGroup.addLayer(markers);
+                    }
+                    
+                    if( linesLength ){
                         var polylines = L.polyline(res.data.polylines.lines, res.data.polylines.style);
                         this.layerGroup.addLayer(polylines);
                         this.mapGlobal.flyTo([res.data.polylines.moveTo.latitude,res.data.polylines.moveTo.longitude], res.data.polylines.moveTo.zoom);
                     }
                     //this.layerGroup.fitBounds(geo.getBounds());
-                    document.getElementById("map-message").innerHTML = "Locaciones cargadas";
+                    this.filters.messages.warning = "";
+                    this.filters.messages.success = ( linesLength == 1 ? linesLength + " Locación cargada" : linesLength + " Locaciones cargadas" );
                 })
                 .catch(err => {
                     console.log(err);
                     if( err.response.data.message != undefined ){
-                        document.getElementById("map-message").innerHTML = err.response.data.message;
+                        this.filters.messages.warning = "err.response.data.message";
+                        this.filters.messages.success = "";
                     }else{
-                        document.getElementById("map-message").innerHTML = "Ocurrio un error, pruebe nuevamente por favor";
+                        this.filters.messages.warning = "Ocurrio un error, pruebe nuevamente por favor";
+                        this.filters.messages.success = "";
                     }
-                    
             });
         },
     },
@@ -185,7 +210,11 @@ export default {
             date: dateNow,
             timeStart: "00:00",
             timeEnd: "23:59",
-            watchMode: false
+            watchMode: false,
+            messages : {
+                warning: "",
+                success: ""
+            }
         };
 
         let base64img =
@@ -300,7 +329,7 @@ export default {
                 },
             });
         }else{
-            let map = L.map("card-map-plus", {
+            var map = L.map("card-map-plus", {
                 zoomControl: true,
                 fadeAnimation: true,
                 markerZoomAnimation: true
@@ -400,5 +429,23 @@ export default {
 }
 #card-map-plus {
     z-index: 0;
+}
+.alert {
+    position: relative;
+    padding: 0.2rem 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    margin-left: 1rem;
+}
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
 }
 </style>
