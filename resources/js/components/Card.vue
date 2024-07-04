@@ -84,7 +84,12 @@ export default {
         },
         clearMap(){
             if(this.layerGroup != undefined ){
-                this.layerGroup.clearLayers();
+                console.log(this.layerGroup);
+                console.log(this.layerGroup.getLayers());
+                if(this.layerGroup.getLayers().length > 0){
+                    console.log("clearLayers: eliminando...");
+                    this.layerGroup.clearLayers();
+                }
                 this.geoJsons.length = 0;
             }else{
                 console.log("No hay locaciones que borrar.");
