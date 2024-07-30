@@ -48,6 +48,15 @@ class Nova4CardMap extends Card
         ]);
     }
 
+    public function markerWarningIcon($markerIcon,$markerIconSize = null,$markerIconAnchor = null){
+
+        return $this->withMeta([
+            'markerWarningIcon' => $markerIcon,
+            'markerWarningIconSize' => $markerIconSize,
+            'markerWarningIconAnchor' => $markerIconAnchor
+        ]);
+    }
+
     public function type($type){
         return $this->withMeta([
             'type' => $type

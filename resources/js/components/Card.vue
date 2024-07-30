@@ -76,6 +76,7 @@ import "leaflet.gridlayer.googlemutant";
 import $Scriptjs from "scriptjs";
 import { latLng, Icon, control, gridLayer } from "leaflet";
 import 'leaflet.fullscreen';
+import 'leaflet-rotatedmarker';
 import moment from 'moment'
 import moment_timezone from 'moment-timezone'
 
@@ -155,6 +156,21 @@ export default {
                         // var markers = L.markerClusterGroup({
                         //     disableClusteringAtZoom: 11,
                         // });
+
+                        var LeafIcon = L.Icon.extend({
+                            options: {
+                            iconSize:     this.card.markerIconSize,
+                            shadowSize:   null,
+                            iconAnchor:   this.card.markerIconAnchor,
+                            shadowAnchor: null
+                            }
+                        });
+                        var successIcon = new LeafIcon({
+                            iconUrl: this.card.markerIcon
+                        })
+                        var warningIcon = new LeafIcon({
+                            iconUrl: this.card.markerWarningIcon
+                        })
                         var geo = L.geoJson(this.geoJsons, {
                             onEachFeature: function (feature, layer) {
                                 if (featureType == "LatLon") {
@@ -163,8 +179,16 @@ export default {
                                     layer.bindPopup(feature.properties[popup]);
                                 }
                             },
-                            pointToLayer: function (feature, latlng) {
-                                return L.marker(latlng);
+                            pointToLayer: function (feature, latlng) {                       
+                                if(feature.iconType == "success"){
+                                    return L.marker(latlng, {icon: successIcon}).setRotationAngle( feature.heading );
+                                }else{
+                                    if(feature.iconType == "warning"){
+                                        return L.marker(latlng, {icon: warningIcon});
+                                    }else{
+                                        return L.marker(latlng, {icon: successIcon});
+                                    }
+                                }
                             },
                         });
                         geo.addTo(this.layerGroup);
