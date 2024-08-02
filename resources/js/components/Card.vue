@@ -5,7 +5,7 @@
                 <div class="w-auto">
                     <div class="px-4 py-2">
                         <label for="device-filter" class="block mb-3 mr-3 text-80 pt-2 leading-tight whitespace-nowrap">Dispositivo</label>
-                        <select class="w-full form-control form-select form-input-bordered" id="device-filter" name="device-filter" v-model="filters.device" @change="filterData()">
+                        <select class="w-full form-control form-select form-input-bordered" id="device-filter" name="device-filter" v-model="filters.device" @change="filterData()" :disabled="filters.messages.warning == 'Espere por favor mientras se obtiene las locaciones'">
                             <option value="0" >-- Seleccione --</option>
                             <option 
                                 v-for="dev in filters.devices" 
@@ -18,19 +18,19 @@
                 <div class="w-auto">
                     <div class="px-4 py-2">
                         <label for="date-filter" class="block mb-3 mr-3 text-80 pt-2 leading-tight whitespace-nowrap">Fecha</label>
-                        <input type="date" class="w-full form-control form-input form-input-bordered" id="date-filter" name="date-filter" v-model="filters.date" @change="filterData()" :disabled="filters.watchMode == 1">
+                        <input type="date" class="w-full form-control form-input form-input-bordered" id="date-filter" name="date-filter" v-model="filters.date" @change="filterData()" :disabled="filters.watchMode == 1 || filters.messages.warning == 'Espere por favor mientras se obtiene las locaciones'">
                     </div>
                 </div>
                 <div class="w-auto">
                     <div class="px-4 py-2">
                         <label for="time-start-filter" class="block mb-3 mr-3 text-80 pt-2 leading-tight whitespace-nowrap">Hora inicio</label>
-                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-start-filter" name="time-start-filter" v-model="filters.timeStart" @change="filterData()" :disabled="filters.watchMode == 1">
+                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-start-filter" name="time-start-filter" v-model="filters.timeStart" @change="filterData()" :disabled="filters.watchMode == 1 || filters.messages.warning == 'Espere por favor mientras se obtiene las locaciones'">
                     </div>
                 </div>
                 <div class="w-auto">
                     <div class="px-4 py-2">
                         <label for="time-end-filter" class="block mb-3 mr-3 text-80 pt-2 leading-tight whitespace-nowrap">Hora fin</label>
-                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-end-filter" name="time-end-filter" v-model="filters.timeEnd" @change="filterData()" :disabled="filters.watchMode == 1">
+                        <input type="time" class="w-full form-control form-input form-input-bordered" id="time-end-filter" name="time-end-filter" v-model="filters.timeEnd" @change="filterData()" :disabled="filters.watchMode == 1 || filters.messages.warning == 'Espere por favor mientras se obtiene las locaciones'">
                     </div>
                 </div>
                 <div class="w-auto">
@@ -127,6 +127,7 @@ export default {
             }
             this.filters.messages.warning = "Espere por favor mientras se obtiene las locaciones";
             this.filters.messages.success = "";
+            
             this.clearMap();
             const params = {
                 date: this.filters.date,
@@ -186,7 +187,14 @@ export default {
                                     if(feature.iconType == "warning"){
                                         return L.marker(latlng, {icon: warningIcon});
                                     }else{
-                                        return L.marker(latlng, {icon: successIcon});
+                                        if(feature.iconType == "iconUrl"){
+                                            var plusIcon = new LeafIcon({
+                                                iconUrl: feature.iconUrl
+                                            })
+                                            return L.marker(latlng, {icon: plusIcon});
+                                        }else{
+                                            return L.marker(latlng, {icon: successIcon});
+                                        }
                                     }
                                 }
                             },
