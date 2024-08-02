@@ -166,6 +166,14 @@ export default {
                             shadowAnchor: null
                             }
                         });
+                        var LeafIconPlus = L.Icon.extend({
+                            options: {
+                            iconSize:     [36,36],
+                            shadowSize:   null,
+                            iconAnchor:   [18,18],
+                            shadowAnchor: null
+                            }
+                        });
                         var successIcon = new LeafIcon({
                             iconUrl: this.card.markerIcon
                         })
@@ -188,7 +196,7 @@ export default {
                                         return L.marker(latlng, {icon: warningIcon});
                                     }else{
                                         if(feature.iconType == "iconUrl"){
-                                            var plusIcon = new LeafIcon({
+                                            var plusIcon = new LeafIconPlus({
                                                 iconUrl: feature.iconUrl
                                             })
                                             return L.marker(latlng, {icon: plusIcon});
